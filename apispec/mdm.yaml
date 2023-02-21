@@ -1,0 +1,577 @@
+openapi: 3.0.1
+info:
+  title: MDM Services
+  description: Api Documentation
+  termsOfService: 'urn:tos'
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0'
+  version: V1
+servers:
+  - url: >-
+      https://xx/mdm/groupref/V1
+  - url: 'https://xx/mdm/groupref/V1'
+paths:
+  /universal-data/countries:
+    get:
+      tags:
+        - country-data-store-controller
+      summary: getCountries
+      description: getCountries
+      operationId: getCountriesUsingGET
+      parameters:
+        - name: page
+          in: query
+          description: Format - int32. Format - int32. Format - int32. page
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+#            '*/*':
+#              schema:
+#                type: object
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Countries'
+              examples:
+                default:
+                  value: null
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  '/universal-data/countries/continent/{continent}':
+    get:
+      tags:
+        - country-data-store-controller
+      summary: getCountriesByContinent
+      description: getCountriesByContinent
+      operationId: getCountriesByContinentUsingGET
+      parameters:
+        - name: continent
+          in: path
+          description: continent
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Format - int32. Format - int32. Format - int32. page
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+              examples:
+                default:
+                  value: null
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  '/universal-data/countries/{id}':
+    get:
+      tags:
+        - country-data-store-controller
+      summary: getCountryById
+      description: getCountryById
+      operationId: getCountryByIdUsingGET
+      parameters:
+        - name: id
+          in: path
+          description: Format - int32. Format - int32. Format - int32. id
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+              examples:
+                default:
+                  value: null
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /third/customers:
+    get:
+      tags:
+        - customer-data-store-controller
+      summary: Get Customers
+      description: Returns a list of Customers according to the criterias.
+      operationId: getCustomersUsingGET
+      parameters:
+        - name: page
+          in: query
+          description: >-
+            Format - int32. Format - int32. Format - int32. Number of the page
+            to display
+          schema:
+            type: integer
+            format: int32
+        - name: duns
+          in: query
+          description: DUNS number
+          schema:
+            type: string
+        - name: name
+          in: query
+          description: Name of the Customer. Wildcards % accepted
+          schema:
+            type: string
+        - name: countryIso2
+          in: query
+          description: Country code ISO2
+          schema:
+            type: string
+        - name: city
+          in: query
+          description: City
+          schema:
+            type: string
+        - name: registrationId
+          in: query
+          description: Registration ID
+          schema:
+            type: string
+        - name: dataOwner
+          in: query
+          description: Name of the data owner. Wildcards % accepted
+          schema:
+            type: string
+        - name: fields
+          in: query
+          description: List of the fields to return. All if empty
+          schema:
+            type: string
+        - name: language
+          in: query
+          description: Language for error message. Default english
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+              examples:
+                default:
+                  value: null
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  '/third/customers/{mdmid}':
+    get:
+      tags:
+        - customer-data-store-controller
+      summary: getCustomerById
+      description: getCustomerById
+      operationId: getCustomerByIdUsingGET
+      parameters:
+        - name: mdmid
+          in: path
+          description: Format - int32. Format - int32. Format - int32. mdmid
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResponseCustomerModel'
+              examples:
+                default:
+                  value: null
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+components:
+  schemas:
+    Countries:
+      title: Countries
+      description: list of country object
+      type: array
+      items:
+        $ref: '#/components/schemas/Country'
+    Country:
+      title: Country
+      description: Country object exposed to customer
+      type: object
+      properties:
+        name:
+          type: string
+          description: name of the country in english
+          default: 'France'
+        code:
+          type: string
+          description: UN/LOCODE of the country ISO 3166
+          default: 'FR'
+    Address:
+      title: Address
+      type: object
+      properties:
+        address1:
+          type: string
+        address2:
+          type: string
+        address3:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        state:
+          type: string
+        type:
+          type: string
+        zipCode:
+          type: string
+    ClientCategorisation:
+      title: ClientCategorisation
+      type: object
+      properties:
+        codeNaic:
+          type: string
+        description:
+          type: string
+        isGlobalAccount:
+          type: string
+        isKeyAccount:
+          type: string
+        originalNaic:
+          type: string
+        subVertical:
+          type: string
+        vertical:
+          type: string
+        website:
+          type: string
+    CustomerModel:
+      title: CustomerModel
+      type: object
+      properties:
+        accountManager:
+          type: string
+        accountName:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        alternativeRecordReason:
+          type: string
+        alternativeThirdForReporting:
+          type: string
+        bofTopCode:
+          type: string
+        categoryThirdNextYear:
+          type: string
+        clStatus:
+          type: string
+        clientCategorisation:
+          $ref: '#/components/schemas/ClientCategorisation'
+        cluster:
+          type: string
+        comment:
+          type: string
+        dataOwner:
+          type: string
+        dataOwnerLob:
+          type: string
+        dataStatus:
+          type: integer
+          format: int32
+        dataSteward:
+          type: string
+        dataStewardLob:
+          type: string
+        deStatus:
+          type: string
+        directParent:
+          type: string
+        dtExtractMdm:
+          type: string
+          format: date-time
+        dtLoad:
+          type: string
+          format: date-time
+        dunsandHierarchy:
+          $ref: '#/components/schemas/DunsAndHierarchy'
+        ffStatus:
+          type: string
+        futureEvolutions:
+          $ref: '#/components/schemas/FutureEvolutions'
+        gid:
+          type: string
+        idEbx:
+          type: string
+        isCommercialFlagged:
+          type: string
+        isCommercialUltimate:
+          type: string
+        isCrmClient:
+          type: string
+        mdmId:
+          type: integer
+          format: int32
+        parent:
+          type: string
+        phoneNumber:
+          type: string
+        recordType:
+          type: string
+        registrationId:
+          type: string
+        registrationIdType:
+          type: string
+        relatedCommercialUltimate:
+          type: string
+        salesResponsibleCountry:
+          type: string
+        scoStatus:
+          type: string
+        statusRt:
+          type: string
+        subCluster:
+          type: string
+        thirdCategoryFk:
+          type: string
+        timestamp:
+          $ref: '#/components/schemas/Timestamp'
+        type:
+          type: string
+        usuelName:
+          type: string
+        validity:
+          $ref: '#/components/schemas/Validity'
+        vatNumber:
+          type: string
+    DunsAndHierarchy:
+      title: DunsAndHierarchy
+      type: object
+      properties:
+        dbDunsName:
+          type: string
+        duns:
+          type: string
+        dunsLevel:
+          type: string
+        isSingleLocation:
+          type: string
+        operatingStatus:
+          type: string
+        parentDuns:
+          type: string
+        parentDunsName:
+          type: string
+        ultimateHoldingDuns:
+          type: string
+        ultimateHoldingDunsName:
+          type: string
+    FutureEvolutions:
+      title: FutureEvolutions
+      type: object
+      properties:
+        commentaire:
+          type: string
+        event:
+          type: string
+        newCodeGc:
+          type: string
+        newCodeTop:
+          type: string
+        timing:
+          type: string
+          format: date-time
+    ModelAndView:
+      title: ModelAndView
+      type: object
+      properties:
+        empty:
+          type: boolean
+        model:
+          type: object
+        modelMap:
+          type: object
+          additionalProperties:
+            type: object
+        reference:
+          type: boolean
+        status:
+          enum:
+            - ACCEPTED
+            - ALREADY_REPORTED
+            - BAD_GATEWAY
+            - BAD_REQUEST
+            - BANDWIDTH_LIMIT_EXCEEDED
+            - CHECKPOINT
+            - CONFLICT
+            - CONTINUE
+            - CREATED
+            - DESTINATION_LOCKED
+            - EXPECTATION_FAILED
+            - FAILED_DEPENDENCY
+            - FORBIDDEN
+            - FOUND
+            - GATEWAY_TIMEOUT
+            - GONE
+            - HTTP_VERSION_NOT_SUPPORTED
+            - IM_USED
+            - INSUFFICIENT_SPACE_ON_RESOURCE
+            - INSUFFICIENT_STORAGE
+            - INTERNAL_SERVER_ERROR
+            - I_AM_A_TEAPOT
+            - LENGTH_REQUIRED
+            - LOCKED
+            - LOOP_DETECTED
+            - METHOD_FAILURE
+            - METHOD_NOT_ALLOWED
+            - MOVED_PERMANENTLY
+            - MOVED_TEMPORARILY
+            - MULTIPLE_CHOICES
+            - MULTI_STATUS
+            - NETWORK_AUTHENTICATION_REQUIRED
+            - NON_AUTHORITATIVE_INFORMATION
+            - NOT_ACCEPTABLE
+            - NOT_EXTENDED
+            - NOT_FOUND
+            - NOT_IMPLEMENTED
+            - NOT_MODIFIED
+            - NO_CONTENT
+            - OK
+            - PARTIAL_CONTENT
+            - PAYLOAD_TOO_LARGE
+            - PAYMENT_REQUIRED
+            - PERMANENT_REDIRECT
+            - PRECONDITION_FAILED
+            - PRECONDITION_REQUIRED
+            - PROCESSING
+            - PROXY_AUTHENTICATION_REQUIRED
+            - REQUESTED_RANGE_NOT_SATISFIABLE
+            - REQUEST_ENTITY_TOO_LARGE
+            - REQUEST_HEADER_FIELDS_TOO_LARGE
+            - REQUEST_TIMEOUT
+            - REQUEST_URI_TOO_LONG
+            - RESET_CONTENT
+            - SEE_OTHER
+            - SERVICE_UNAVAILABLE
+            - SWITCHING_PROTOCOLS
+            - TEMPORARY_REDIRECT
+            - TOO_EARLY
+            - TOO_MANY_REQUESTS
+            - UNAUTHORIZED
+            - UNAVAILABLE_FOR_LEGAL_REASONS
+            - UNPROCESSABLE_ENTITY
+            - UNSUPPORTED_MEDIA_TYPE
+            - UPGRADE_REQUIRED
+            - URI_TOO_LONG
+            - USE_PROXY
+            - VARIANT_ALSO_NEGOTIATES
+          type: string
+        view:
+          $ref: '#/components/schemas/View'
+        viewName:
+          type: string
+    ResponseCustomerModel:
+      title: ResponseCustomerModel
+      type: object
+      properties:
+        errors:
+          type: object
+        metadata:
+          type: object
+        payload:
+          $ref: '#/components/schemas/CustomerModel'
+        status:
+          enum:
+            - ACCESS_DENIED
+            - BAD_REQUEST
+            - DUPLICATE_ENTITY
+            - EXCEPTION
+            - FORBIDDEN
+            - NOT_FOUND
+            - OK
+            - UNAUTHORIZED
+            - VALIDATION_EXCEPTION
+            - WRONG_CREDENTIALS
+          type: string
+    Timestamp:
+      title: Timestamp
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+    Validity:
+      title: Validity
+      type: object
+      properties:
+        endDate:
+          type: string
+          format: date-time
+        isValid:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+    View:
+      title: View
+      type: object
+      properties:
+        contentType:
+          type: string
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: Ocp-Apim-Subscription-Key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query
+security:
+  - apiKeyHeader: []
+  - apiKeyQuery: []
+tags:
+  - name: basic-error-controller
+    description: Basic Error Controller
+  - name: country-data-store-controller
+    description: Country Data Store Controller
+  - name: customer-data-store-controller
+    description: Customer Data Store Controller
